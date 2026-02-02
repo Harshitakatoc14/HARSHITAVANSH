@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <title>My Valentine Surprise</title>
 <style>
-body, html {margin:0; padding:0; font-family:'Arial', sans-serif; overflow-x:hidden;}
+body, html {margin:0; padding:0; font-family:'Arial',sans-serif; overflow:hidden;}
 
 /* COMMON PAGE STYLES */
 .page {width:100vw; height:100vh; display:none; justify-content:center; align-items:center; flex-direction:column; position:relative; padding:20px;}
@@ -31,10 +31,10 @@ body, html {margin:0; padding:0; font-family:'Arial', sans-serif; overflow-x:hid
 /* POPUP "Love is in the Air ❤️" */
 .popup {
     position:absolute;
-    bottom:20px;
+    bottom:30px;
     left:50%;
     transform:translateX(-50%) scale(0);
-    background-color: rgba(255,255,255,0.85);
+    background-color: rgba(255,255,255,0.9);
     color:#e74c3c;
     padding:20px 50px;
     font-size:28px;
@@ -89,8 +89,7 @@ body, html {margin:0; padding:0; font-family:'Arial', sans-serif; overflow-x:hid
 .page2 .options button {display:block; margin:10px auto; padding:12px 25px; font-size:20px; border:none; border-radius:25px; cursor:pointer; background-color:pink; color:white; box-shadow:0 4px 10px rgba(0,0,0,0.3); transition:transform 0.2s, background-color 0.2s;}
 .page2 .options button:hover {transform:scale(1.1); background-color:hotpink;}
 .page2 .message {color:red; font-size:22px; margin-top:10px;}
-.kisses-popup {position:absolute; top:40%; left:50%; transform:translateX(-50%); background-color:hotpink; color:white; padding:20px 40px; font-size:26px; border-radius:50px; box-shadow:0 0 15px rgba(0,0,0,0.5); display:none; animation:popupAnim2 1s forwards;}
-@keyframes popupAnim2 {0%{opacity:0;transform:translateX(-50%) scale(0.5);}50%{opacity:1;transform:translateX(-50%) scale(1.1);}100%{opacity:1;transform:translateX(-50%) scale(1);}}
+.kisses-popup {margin-top:15px; display:none; font-size:24px; color:hotpink; font-weight:bold;}
 
 /* PAGE 3 */
 .page3 {
@@ -124,8 +123,8 @@ body, html {margin:0; padding:0; font-family:'Arial', sans-serif; overflow-x:hid
 <div class="card">
 <div class="question" id="questionText"></div>
 <div class="options" id="optionsContainer"></div>
-<div class="message" id="message"></div>
 <div class="kisses-popup" id="kissesPopup">Kisses are on the way 💋</div>
+<div class="message" id="message"></div>
 </div>
 </div>
 
@@ -157,9 +156,9 @@ function createHeart() {
 setInterval(createHeart, 400);
 
 // PAGE 1 popup then go to page2
-const page1=document.getElementById('page1');
-const page2=document.getElementById('page2');
-const lovePopup=document.getElementById('lovePopup');
+const page1 = document.getElementById('page1');
+const page2 = document.getElementById('page2');
+const lovePopup = document.getElementById('lovePopup');
 
 setTimeout(()=>{
     lovePopup.style.transform="translateX(-50%) scale(1)";
@@ -168,56 +167,65 @@ setTimeout(()=>{
         page1.classList.remove('active');
         page2.classList.add('active');
         showQuestion(0);
-    },3000);
+    },3000); // after popup stays 3s, move to page2
 },1000);
 
 // PAGE 2 Questions
-const questions=[
+const questions = [
 {text:"When did we kiss for the first time?",options:["25 December","26 December","27 December"],answer:"26 December"},
 {text:"When did you say I love you to me?",options:["1 January","2 January","3 January"],answer:"2 January"},
 {text:"Whom do you love the most?",options:["PUBG","Me"],answer:"Me"},
 {text:"Who is the smartest person in our relationship?",options:["Vansh","Harshita"],answer:"Harshita"}
 ];
 
-let currentQuestion=0;
-const questionText=document.getElementById('questionText');
-const optionsContainer=document.getElementById('optionsContainer');
-const message=document.getElementById('message');
-const kissesPopup=document.getElementById('kissesPopup');
+let currentQuestion = 0;
+const questionText = document.getElementById('questionText');
+const optionsContainer = document.getElementById('optionsContainer');
+const message = document.getElementById('message');
+const kissesPopup = document.getElementById('kissesPopup');
 
 function showQuestion(index){
 message.textContent="";
-questionText.textContent=questions[index].text;
+kissesPopup.style.display="none";
+questionText.textContent = questions[index].text;
 optionsContainer.innerHTML="";
 questions[index].options.forEach(option=>{
-const btn=document.createElement('button');
-btn.textContent=option;
-btn.onclick=()=>checkAnswer(option);
-optionsContainer.appendChild(btn);
+    const btn = document.createElement('button');
+    btn.textContent = option;
+    btn.onclick = ()=>checkAnswer(option);
+    optionsContainer.appendChild(btn);
 });
 }
 
 function checkAnswer(selected){
-if(selected===questions[currentQuestion].answer){
-    kissesPopup.style.display="block";
+if(selected === questions[currentQuestion].answer){
+    kissesPopup.style.display = "block";
     setTimeout(()=>{
         kissesPopup.style.display="none";
         currentQuestion++;
-        if(currentQuestion<questions.length) showQuestion(currentQuestion);
-        else {page2.classList.remove('active'); page3.classList.add('active');}
-    },2000); // stays longer
+        if(currentQuestion<questions.length){
+            showQuestion(currentQuestion);
+        } else {
+            page2.classList.remove('active');
+            page3.classList.add('active');
+        }
+    },2000); // kisses popup stays longer
 }else{
-    message.textContent="Wrong answer, Mote kutte 😢";
+    message.textContent = "Wrong answer, Mote kutte 😢";
 }
 }
 
 // PAGE 3 Valentine
 function checkValentine(ans){
-const finalMessage=document.getElementById('finalMessage');
-const romanticLines=document.getElementById('romanticLines');
-if(ans==='yes'){finalMessage.textContent="Yay! 💖 You made me so happy!";
-romanticLines.innerHTML="You are my sunshine 🌞,<br>My forever and always 💕,<br>Happy Valentine's Day, my love ❤️";
-}else{finalMessage.textContent="Nahi Mote! Wrong answer 😢";romanticLines.textContent="";}
+const finalMessage = document.getElementById('finalMessage');
+const romanticLines = document.getElementById('romanticLines');
+if(ans==='yes'){
+    finalMessage.textContent="Yay! 💖 You made me so happy!";
+    romanticLines.innerHTML="You are my sunshine 🌞,<br>My forever and always 💕,<br>Happy Valentine's Day, my love ❤️";
+}else{
+    finalMessage.textContent="Nahi Mote! Wrong answer 😢";
+    romanticLines.textContent="";
+}
 }
 </script>
 </body>
